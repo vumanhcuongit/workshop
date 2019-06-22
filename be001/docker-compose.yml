@@ -1,0 +1,21 @@
+version: '3'
+services:
+  node:
+    image: node:10
+    volumes:
+      - .:/usr/src/app/
+    working_dir: /usr/src/app/
+    command: yarn start
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  db:
+    image: postgres
+    restart: always
+    logging:
+      driver: none
+    environment:
+      POSTGRES_USER: be001
+      POSTGRES_PASSWORD: be001password
+      POSTGRES_DB: be001-dev
