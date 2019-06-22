@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js",
+    "start": "DEBUG=BE001:* nodemon --exec babel-node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
@@ -12,5 +12,9 @@
     "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "express": "^4.17.1"
   }
 }
