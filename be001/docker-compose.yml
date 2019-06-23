@@ -5,17 +5,21 @@ services:
     volumes:
       - .:/usr/src/app/
     working_dir: /usr/src/app/
-    command: yarn start
+    command: bash -c "yarn && yarn start"
     ports:
       - 3000:3000
     depends_on:
       - db
   db:
-    image: postgres
+    image: postgres:11
+    volumes:
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d
+      - ./docker/postgres-data:/var/lib/postgresql/data
     restart: always
-    logging:
-      driver: none
+    # logging:
+    #   driver: none
     environment:
       POSTGRES_USER: be001
       POSTGRES_PASSWORD: be001password
-      POSTGRES_DB: be001-dev
+      POSTGRES_DB: be001dev
+      POSTGRES_TEST_DB: be001test
