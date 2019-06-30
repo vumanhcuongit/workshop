@@ -3,14 +3,14 @@
     "username": "be001",
     "password": "be001password",
     "database": "be001dev",
-    "host": "db",
+    "host": "localhost",
     "dialect": "postgres"
   },
   "test": {
     "username": "be001",
     "password": "be001password",
     "database": "be001test",
-    "host": "db",
+    "host": "localhost",
     "dialect": "postgres",
     "logging": false
   },

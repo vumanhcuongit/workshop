@@ -55,6 +55,3 @@ node_modules/
 
 # db config
 db/config.json
-
-# docker
-docker/postgres-data
