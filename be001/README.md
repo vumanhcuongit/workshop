@@ -14,6 +14,9 @@ You will need:
 cd path/to/your/project/be001
 yarn
 ```
+- Setup database
+  - Create a new login user with the following information: be001 / be001password
+  - Create a new table named be001dev
 - Config database
 ```Bash
 # copy the config file
