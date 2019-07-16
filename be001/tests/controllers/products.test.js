@@ -42,7 +42,7 @@ describe('Products controller', () => {
   });
 
   describe('#update', () => {
-    it('updates a product detals', async () => {
+    it('updates a product', async () => {
       const sample = await Product.create(sampleProductData);
       const response = await request(app).put(`/products/${sample.id}`).send({
         name: 'Updated name',

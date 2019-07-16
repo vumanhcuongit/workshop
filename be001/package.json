@@ -6,7 +6,7 @@
     "dev": "cross-env DEBUG=BE001:* nodemon --exec babel-node src/index.js",
     "build": "babel src --out-dir dist ",
     "test": "cross-env NODE_ENV=test jest --forceExit",
-    "db": "sequelize"
+    "sql": "sequelize"
   },
   "license": "MIT",
   "devDependencies": {
