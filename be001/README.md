@@ -3,9 +3,9 @@
 ## Presequisites
 You will need:
 - NodeJS: https://nodejs.org/en/
-- Yarn: https://yarnpkg.com/en/docs/install
 - Posgresql: https://www.postgresql.org/download/
-- pgAdmin: https://pgadmin.org
+- Yarn **optional**: https://yarnpkg.com/en/docs/install
+- pgAdmin **optional**: https://pgadmin.org
 
 ## Getting started
 - Fork this repo
@@ -16,8 +16,8 @@ cd path/to/your/project/be001
 yarn
 ```
 - Setup database
-  - Create a new login user with username/password: **be001** / **be001password**
-  - Create a new table named **be001dev**
+  - Create a new user, for example **be001** / **be001password**
+  - Create 2 new databases, **be001dev** and **be001test**
 - Config database
 ```Bash
 # copy the config file
@@ -26,11 +26,10 @@ cp db/config.example.json db/config.json
 ```
 - Run database migrations & seeders
 ```Bash
-yarn db db:migrate
-yarn db db:seed:all
+yarn sql db:migrate
+yarn sql db:seed:all
 ```
 - Start the server
 ```Bash
 yarn dev
 ```
-

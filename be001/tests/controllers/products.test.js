@@ -20,7 +20,7 @@ describe('Products controller', () => {
   });
 
   describe('#show', () => {
-    it('shows a product detals', async () => {
+    it('shows a product details', async () => {
       const sample = await Product.create(sampleProductData);
       const response = await request(app).get(`/products/${sample.id}`).send();
       expect(response.statusCode).toBe(200);
@@ -52,7 +52,7 @@ describe('Products controller', () => {
   });
 
   describe('#destroy', () => {
-    it('deletes a product detals', async () => {
+    it('deletes a product', async () => {
       const sample = await Product.create(sampleProductData);
       const sampleId = sample.id;
       const response = await request(app).delete(`/products/${sampleId}`).send();
