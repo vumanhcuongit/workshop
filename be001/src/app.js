@@ -15,4 +15,18 @@ app.use('/products', productsRoutes);
 // api docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
+// error handling
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    error: err.message,
+  });
+});
+
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not found',
+  });
+});
+
 export default app;

@@ -55,7 +55,7 @@ export const update = async (req, res, next) => {
     if (rowsUpdated === 1) {
       res.status(204).end();
     } else {
-      next(new Error('No record updated'));
+      next(new Error('No product updated'));
     }
   } catch (err) {
     next(err);
@@ -73,7 +73,7 @@ export const destroy = async (req, res, next) => {
     if (rowsDestroyed === 1) {
       res.status(204).end();
     } else {
-      next(new Error('No record destroyed'));
+      next(new Error('No product destroyed'));
     }
   } catch (err) {
     next(err);
