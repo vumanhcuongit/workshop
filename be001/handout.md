@@ -451,7 +451,7 @@ router.delete('/:id', destroy);
       ...
       expect(response.body.price).toEqual(sample.price);
       // we are expecting our api result to have this new field
-      expect(response.body.price).toHaveProperty('category');
+      expect(response.body).toHaveProperty('category');
     });
   });
 ...
@@ -482,7 +482,7 @@ done!
 
       39 |       expect(response.body.description).toEqual(sample.description);
       40 |       expect(response.body.price).toEqual(sample.price);
-    > 41 |       expect(response.body.price).toHaveProperty('category');
+    > 41 |       expect(response.body).toHaveProperty('category');
          |                                   ^
       42 |     });
       43 |   });
@@ -532,4 +532,67 @@ yarn sql db:migrate
   };
 
   return Product;
+```
+
+## Step 3: Update Products controller
+- Update `Products` controller to include `category`
+`src/controllers/products.js`
+```javascript
+...
+export const index = async (req, res, next) => {
+  ...
+    // include category from relationship, exclude the native categoryId attribute
+    const products = await Product.findAll({
+      include: ['category'],
+      attributes: { exclude: ['categoryId'] },
+    });
+  ...
+};
+...
+export const show = async (req, res, next) => {
+  ...
+    const product = await Product.findByPk(id, {
+      include: ['category'],
+      attributes: { exclude: ['categoryId'] },
+    });
+  ...
+};
+...
+export const create = async (req, res, next) => {
+  ...
+    const {
+      name, description, price, categoryId, // handle categoryId parameter
+    } = req.body;
+    const newProduct = await Product.create({
+      name,
+      description,
+      price,
+      categoryId,
+    });
+  ...
+};
+...
+export const update = async (req, res, next) => {
+  ...
+    const {
+      name, description, price, categoryId, // handle categoryId
+    } = req.body;
+    const [rowsUpdated] = await Product.update({
+      name,
+      description,
+      price,
+      categoryId,
+    }, {
+      where: {
+        id,
+      },
+    });
+  ...
+};
+
+```
+
+- rerun the tests (should pass)
+```bash
+yarn test
 ```
