@@ -3,7 +3,9 @@ import app from './app';
 
 const dbg = debug('BE001:main');
 
+const port = process.env.PORT || 3000;
+
 (async () => {
-  await app.listen(3000);
-  dbg('Server is listening on port 3000');
+  await app.listen(port);
+  dbg(`Server is listening on port ${port}`);
 })();
