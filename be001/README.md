@@ -33,3 +33,6 @@ yarn sql db:seed:all
 ```Bash
 yarn dev
 ```
+
+## Handout
+https://github.com/grokking-vietnam/workshop/blob/be001/result/be001/handout.md
