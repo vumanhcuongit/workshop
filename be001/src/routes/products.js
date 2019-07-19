@@ -30,7 +30,7 @@ const router = new Router();
  *      - application/json
  *     responses:
  *       200:
- *         description: books
+ *         description: products
  *         schema:
  *           type: array
  *           items:
@@ -74,7 +74,7 @@ router.get('/:id', show);
  *      - application/json
  *     responses:
  *       201:
- *         description: book
+ *         description: Product
  *         schema:
  *           $ref: '#/definitions/Product'
  */
