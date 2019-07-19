@@ -11,6 +11,16 @@ const sampleProductData = {
 };
 
 describe('Products controller', () => {
+  describe('#create', () => {
+    it('creates a product', async () => {
+      const response = await request(app).post('/products').send(sampleProductData);
+      expect(response.status).toBe(201);
+      expect(response.body.name).toEqual(sampleProductData.name);
+      expect(response.body.description).toEqual(sampleProductData.description);
+      expect(response.body.price).toEqual(sampleProductData.price);
+    });
+  });
+
   describe('#index', () => {
     it('shows list of products', async () => {
       const response = await request(app).get('/products').send();
@@ -28,16 +38,6 @@ describe('Products controller', () => {
       expect(response.body.name).toEqual(sample.name);
       expect(response.body.description).toEqual(sample.description);
       expect(response.body.price).toEqual(sample.price);
-    });
-  });
-
-  describe('#create', () => {
-    it('creates a product', async () => {
-      const response = await request(app).post('/products').send(sampleProductData);
-      expect(response.status).toBe(201);
-      expect(response.body.name).toEqual(sampleProductData.name);
-      expect(response.body.description).toEqual(sampleProductData.description);
-      expect(response.body.price).toEqual(sampleProductData.price);
     });
   });
 
