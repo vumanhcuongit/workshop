@@ -491,3 +491,45 @@ done!
       at Object.toHaveProperty (tests/controllers/products.test.js:41:35)
 ...
 ```
+
+## Step 2: Relationship - add foreign key
+- use cli to create a new migration
+```bash
+yarn sql migration:generate --name add-category-id-to-product
+```
+- edit the migration file
+`db/migrations/{timestamp}-add-category-id-to-product.js`
+```javascript
+export default {
+  up: (queryInterface, Sequelize) => queryInterface.addColumn('Products', 'categoryId', {
+    type: Sequelize.INTEGER,
+    references: {
+      model: 'Categories',
+      key: 'id',
+    },
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+  }),
+  down: queryInterface => queryInterface.removeColumn('Products', 'categoryId'),
+};
+```
+
+- run the migration
+```bash
+yarn sql db:migrate
+```
+
+- update `Product` model definition to add the new relationship
+`src/models/product.js`
+```javascript
+  ...
+  // define the relationship
+  Product.associate = (models) => {
+    Product.belongsTo(models.Category, {
+      foreignKey: 'categoryId',
+      as: 'category',
+    });
+  };
+
+  return Product;
+```
