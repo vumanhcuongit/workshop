@@ -439,3 +439,55 @@ router.delete('/:id', destroy);
 ```
 
 - go to [document page](http://localhost:3000/api-docs/) to check for the updated docs
+
+# Exercise 4: Include category in product API
+## Step 1: Update tests
+- edit products tests
+`tests/controllers/products.test.js`
+```javascript
+...
+  describe('#show', () => {
+    it('shows a product details', async () => {
+      ...
+      expect(response.body.price).toEqual(sample.price);
+      // we are expecting our api result to have this new field
+      expect(response.body.price).toHaveProperty('category');
+    });
+  });
+...
+```
+
+- feel free to add more tests if you want!
+
+- try to run tests (will fail)
+```bash
+yarn test
+
+yarn run v1.17.3
+$ cross-env NODE_ENV=test jest --forceExit
+Determining test suites to run...
+Syncing test DB...
+done!
+
+ PASS  tests/controllers/categories.test.js
+ FAIL  tests/controllers/products.test.js
+  ● Products controller › #show › shows a product details
+
+    expect(received).toHaveProperty(path)
+
+    Expected path: "category"
+    Received path: []
+
+    Received value: 9999
+
+      39 |       expect(response.body.description).toEqual(sample.description);
+      40 |       expect(response.body.price).toEqual(sample.price);
+    > 41 |       expect(response.body.price).toHaveProperty('category');
+         |                                   ^
+      42 |     });
+      43 |   });
+      44 | 
+
+      at Object.toHaveProperty (tests/controllers/products.test.js:41:35)
+...
+```
