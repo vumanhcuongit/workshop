@@ -1,5 +1,8 @@
 import request from 'supertest';
 import app from '../../src/app';
+import models from '../../src/models';
+
+const { Category } = models;
 
 const sampleCategoryData = {
   name: 'Sample Category',
@@ -24,18 +27,18 @@ describe('Categories controller', () => {
 
   describe('#show', () => {
     it('shows a category details', async () => {
-      const id = 1; // mock it for now
-      const response = await request(app).get(`/categories/${id}`).send();
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).get(`/categories/${sample.id}`).send();
       expect(response.statusCode).toBe(200);
-      expect(response.body.id).toEqual(id);
-      expect(response.body.name).toEqual('Some name');
+      expect(response.body.id).toEqual(sample.id);
+      expect(response.body.name).toEqual(sample.name);
     });
   });
 
   describe('#update', () => {
     it('updates a category', async () => {
-      const id = 1; // mock it for now
-      const response = await request(app).put(`/categories/${id}`).send({
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).put(`/categories/${sample.id}`).send({
         name: 'Updated name',
       });
       expect(response.statusCode).toBe(204); // http code 204 -> no content
@@ -44,8 +47,8 @@ describe('Categories controller', () => {
 
   describe('#destroy', () => {
     it('deletes a category', async () => {
-      const id = 1; // mock it for now
-      const response = await request(app).delete(`/categories/${id}`).send();
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).delete(`/categories/${sample.id}`).send();
       expect(response.statusCode).toBe(204);
     });
   });

@@ -135,5 +135,185 @@ export default (sequelize, DataTypes) => {
 yarn sql db:migrate
 ```
 
+## Step 3: Create controller & routes, update tests
+- first, update tests
+`tests/controllers/categories.test.js`
+```javascript
+...
+import app from '../../src/app';
+// refer to Category model
+import models from '../../src/models'; 
+const { Category } = models;
+...
 
+describe('Categories controller', () => {
+  ...
+  describe('#show', () => {
+    it('shows a category details', async () => {
+      // replace mock with real data
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).get(`/categories/${sample.id}`).send();
+      ...
+    });
+  });
+  ...
+  describe('#update', () => {
+    it('updates a category', async () => {
+      // replace mock with real data
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).put(`/categories/${sample.id}`).send({
+        name: 'Updated name',
+      });
+      ...
+    });
+  });
+  ...
+  describe('#destroy', () => {
+    it('deletes a category', async () => {
+      // replace mock with real data
+      const sample = await Category.create(sampleCategoryData);
+      const response = await request(app).delete(`/categories/${sample.id}`).send();
+      ...
+    });
+  });
+  ...
+});
+
+```
+
+- create categories controller
+`src/controllers/categories.js`
+```javascript
+import models from '../models';
+
+const { Product } = models;
+
+export const index = async (req, res, next) => {
+  try {
+    const products = await Product.findAll();
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const show = async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const product = await Product.findByPk(id);
+    if (product) {
+      res.json(product);
+    } else {
+      next(new Error('Product not found'));
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const create = async (req, res, next) => {
+  try {
+    const { name, description, price } = req.body;
+    const newProduct = await Product.create({
+      name,
+      description,
+      price,
+    });
+    res.status(201).json(newProduct);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const update = async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const { name, description, price } = req.body;
+    const [rowsUpdated] = await Product.update({
+      name,
+      description,
+      price,
+    }, {
+      where: {
+        id,
+      },
+    });
+    if (rowsUpdated === 1) {
+      res.status(204).end();
+    } else {
+      next(new Error('No product updated'));
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const destroy = async (req, res, next) => {
+  try {
+    const id = parseInt(req.params.id, 10);
+    const rowsDestroyed = await Product.destroy({
+      where: {
+        id,
+      },
+    });
+    if (rowsDestroyed === 1) {
+      res.status(204).end();
+    } else {
+      next(new Error('No product destroyed'));
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+```
+
+- create categories routes
+`src/routes/categories.js`
+```javascript
+import { Router } from 'express';
+import {
+  index, show, create, update, destroy,
+} from '../controllers/categories';
+
+const router = new Router();
+
+router.get('/', index);
+router.get('/:id', show);
+router.post('/', create);
+router.put('/:id', update);
+router.delete('/:id', destroy);
+
+export default router;
+```
+
+- register categories routes
+`src/app.js`
+```javascript
+...
+import productsRoutes from './routes/products';
+import categoriesRoutes from './routes/categories'; // add this
+...
+app.use('/products', productsRoutes);
+app.use('/categories', categoriesRoutes); // add this
+...
+```
+
+- try to run tests again (should pass now)
+```bash
+yarn run v1.17.3
+$ cross-env NODE_ENV=test jest --forceExit
+Determining test suites to run...
+Syncing test DB...
+done!
+
+ PASS  tests/controllers/products.test.js
+ PASS  tests/controllers/categories.test.js
+
+Test Suites: 2 passed, 2 total
+Tests:       10 passed, 10 total
+Snapshots:   0 total
+Time:        1.832s, estimated 2s
+Ran all test suites.
+```
 
