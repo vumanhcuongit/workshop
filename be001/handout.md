@@ -596,3 +596,76 @@ export const update = async (req, res, next) => {
 ```bash
 yarn test
 ```
+
+# Exercise 5: Deploy
+## Prepare
+- ssh to the server
+```bash
+ssh user{id}@139.59.221.207
+```
+Windows users can use [putty](https://www.putty.org/)
+we have created 5 users, please use them in turns.
+```
+- user01/user01
+- user02/user02
+- user03/user03
+- user04/user04
+- user05/user05
+```
+
+- install `pm2` globally
+```bash
+yarn global add pm2
+```
+
+- create database & database user
+```bash
+sudo su - postgres psql
+# inside postgres shell (you should see postgres=# )
+create database your_database; # create database, should be user{id}_db
+create user your_user with password your_password; # create the user
+grant all privileges on database your_database to your_user; # grant permissions
+\q # exit the postgres shell (you should see user{id}@workshop-be001:~$)
+```
+- clone your repo
+```bash
+git clone link_to_your_repo your_local_dir # clone your repo
+# example: git clone https://github.com/grokking-vietnam/workshop user01_workshop
+```
+- cd to the server code
+```bash
+cd your_local_dir/be001
+```
+- install packages
+```bash
+yarn
+```
+- copy database config files and edit it
+```bash
+cp db/config.example.json db/config.json
+vim db/config.job # or use 'nano', fill in the 'production' section with your database & database user
+```
+- run db migrations, and seeds
+```bash
+NODE_ENV=production yarn sql db:migrate
+NODE_ENV=production yarn sql db:seed:all
+```
+
+## Start the server in production mode
+- build the source (transpile es6)
+```bash
+yarn build
+```
+- start the server in production mode, with a specified port
+```bash
+NODE_ENV=production PORT=your_port pm2 start dist/index.js --name="API-{id}"
+```
+the port should be `80{id}`, for example `8001`, and the name should be `API-01`.
+
+you now can access your deployed server through `http://139.59.221.207:your_port`, and use Postman to play with your deployed server
+
+- you can run
+```bash
+pm2 -h
+```
+to see list of pm2's command
