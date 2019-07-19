@@ -87,5 +87,53 @@ done!
 
 ```
 
+## Step 2: Create the model
+- use cli to create the `Category` model
+```bash
+yarn sql model:generate --name Category --attributes name:string
+```
+- there will be 2 files created, update them to es6 format (optional)
+
+`db/migrations/{timestamp}-create-category.js`
+```javascript
+export default {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('Categories', {
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER,
+    },
+    name: {
+      type: Sequelize.STRING,
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE,
+    },
+  }),
+  down: queryInterface => queryInterface.dropTable('Categories'),
+};
+```
+
+`src/models/category.js`
+```javascript
+export default (sequelize, DataTypes) => {
+  const Category = sequelize.define('Category', {
+    name: DataTypes.STRING,
+  }, {});
+  return Category;
+};
+```
+
+- run db migration (to create the underlying table)
+```bash
+yarn sql db:migrate
+```
+
 
 
