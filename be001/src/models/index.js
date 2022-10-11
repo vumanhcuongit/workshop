@@ -1,3 +1,4 @@
+public_key this is A&O
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
